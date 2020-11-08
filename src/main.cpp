@@ -4,8 +4,7 @@
 using std::cin;
 using std::endl;
 using std::cout;
-int main(int argc, char const* argv[])
-{
+int main(int argc, char const* argv[]) {
     StudentScore scores = { 20,80,70,40,50,60,70 };
     cout << scores.getMaxGrade() << " " << scores.getMinGrade() << " " << scores.getAverage() << endl;
     scores.sort();
