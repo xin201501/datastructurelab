@@ -20,9 +20,14 @@ LinkList<T> retainAll(const LinkList<T>& one, const LinkList<T>& theOther) {
     }
     return result;
 }
-//算法假定链表已按一定规则递增排序
+//算法假定链表已按一定规则递增排序，求两集合的交集
 template<typename T>
-LinkList<T> addAll(const LinkList<T>& one, const LinkList<T>& theOther) {
+void addAll(LinkList<T>& one, const LinkList<T>& theOther) {
+    one = addAllCopy(one, theOther);
+}
+//不改变源对象返回新集合的版本
+template<typename T>
+LinkList<T> addAllCopy(const LinkList<T>& one, const LinkList<T>& theOther) {
     LinkList<T>result;
     auto thisCur = *one, anotherCur = *theOther;
     while (thisCur && anotherCur) {
@@ -41,7 +46,7 @@ LinkList<T> addAll(const LinkList<T>& one, const LinkList<T>& theOther) {
         }
     }
     while (thisCur) {
-        result.addNode(thisCur->value);
+        result.addNode(anotherCur->value);
         thisCur = thisCur->next;
     }
     while (anotherCur) {
@@ -50,25 +55,38 @@ LinkList<T> addAll(const LinkList<T>& one, const LinkList<T>& theOther) {
     }
     return result;
 }
-//算法假定链表已按一定规则递增排序
+//算法假定链表已按一定规则递增排序,将source中与selectSet相同的元素删除
 template<typename T>
 void removeAll(LinkList<T>& source, const LinkList<T>& selectSet) {
-    auto sourceCur = *source, selectCur = *selectSet;
-    decltype(sourceCur) pre = nullptr;
-    while (sourceCur && selectCur) {
-        if (sourceCur->value == selectCur->value) {
-            auto tmp = sourceCur->next;
-            source.deleteNodeAfter(pre);
-            pre = tmp;
-            sourceCur = tmp->next;
-            selectCur = selectCur->next;
+    auto sourceCur = *source, selectCur = *selectSet, pre = source.getHead();
+    while (selectCur)
+    {
+        while (sourceCur) {
+            if (sourceCur->value == selectCur->value) {
+                source.deleteNodeAfter(pre);
+                sourceCur = pre->next;
+            }
+            else {
+                pre = sourceCur;
+                sourceCur = sourceCur->next;
+            }
         }
-        else if (sourceCur->value < selectCur->value) {
-            pre = sourceCur;
-            sourceCur = sourceCur->next;
-        }
-        else {
-            selectCur = selectCur->next;
-        }
+        sourceCur = *source;
+        selectCur = selectCur->next;
     }
+
+}
+//不改变源对象返回新集合的版本
+template<typename T>
+LinkList<T> removeAllCopy(const LinkList<T>& source, const LinkList<T>& selectSet) {
+    auto result = source;
+    removeAll(result, selectSet);
+    return result;
+}
+//求集合的补集
+template<typename T>
+LinkList<T> calculateComplement(const LinkList<T>& source, const LinkList<T>& selectSet) {
+    LinkList<T> result = selectSet;
+    removeAll(result, source);
+    return result;
 }
