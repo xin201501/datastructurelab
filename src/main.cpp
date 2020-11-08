@@ -17,7 +17,7 @@ int main(int argc, char const* argv[]) {
     l1.sort();
     l2.sort();
     cout << "l1" << l1 << endl << "l2" << l2 << endl;
-    // removeAll(l1, l2);
+    cout << removeAllCopy(l1, l2) << endl;
     // cout << l1 << endl;
     // l1.addNode(25);
     // cout << l1 << endl;

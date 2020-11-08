@@ -122,6 +122,9 @@ public:
     }
     //算法接受被删除元素之前节点的指针
     void deleteNodeAfter(LinkNodePtr prePtr) {
+        if (!prePtr || !prePtr->next) {
+            return;
+        }
         auto tmp = prePtr->next;
         prePtr->next = tmp->next;
         delete tmp;

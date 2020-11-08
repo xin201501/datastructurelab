@@ -71,6 +71,7 @@ void removeAll(LinkList<T>& source, const LinkList<T>& selectSet) {
                 sourceCur = sourceCur->next;
             }
         }
+        pre = source.getHead();
         sourceCur = *source;
         selectCur = selectCur->next;
     }
