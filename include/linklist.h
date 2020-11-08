@@ -16,8 +16,7 @@ struct LinkNode {
     }
 };
 template<typename T>
-class LinkList
-{
+class LinkList {
 public:
     using LinkNodePtr = LinkNode<T>*;
     using LinkNodeReference = LinkNode<T>&;
@@ -86,6 +85,12 @@ public:
             visitWay(*cur);
             cur = cur->next;
         }
+    }
+    void visit(const std::function<void(const LinkNodeReference)>& visitWay = [](const LinkNodeReference node) {
+        std::cout << node->value << ' ';
+        })const {
+        //使常量复用非常量函数，只要不改变他的值即可，visitWay参数为const引用保证它不被修改
+        const_cast<LinkList<T>*>(this)->visit(visitWay);
     }
     void addNode(const T& value) {
         LinkNodePtr newNode = new LinkNode(value, head->next);

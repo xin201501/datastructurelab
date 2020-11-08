@@ -17,7 +17,7 @@ int main(int argc, char const* argv[])
     cout << l2 << endl;
     l1.sort();
     l2.sort();
-    cout << "l1" << l1 << '\n' << "l2" << l2 << endl;
+    cout << "l1" << l1 << endl << "l2" << l2 << endl;
     // removeAll(l1, l2);
     // cout << l1 << endl;
     // l1.addNode(25);
@@ -26,5 +26,5 @@ int main(int argc, char const* argv[])
     // cout << l1 << endl;
     // cout << calculateComplement(l1, l2);
     addAll(l1, l2);
-    cout << l1;
+    cout << l1 << ' ' << l1.size();
 }

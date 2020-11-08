@@ -1,5 +1,6 @@
 #pragma once
 #include<initializer_list>
+#include<string>
 #include<exception>
 #include<functional>
 #include"linklist.h"
