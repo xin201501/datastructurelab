@@ -6,11 +6,12 @@
 template<typename T>
 struct LinkNode {
     using value_type = T;
-    using LinkNodePtr = LinkNode<T>*;
+    using LinkNodePtr = LinkNode*;
     T value;
     LinkNode* next;
     LinkNode(const T& value = 0, LinkNode* next = nullptr) :value(value), next(next) {}
-    LinkNode(T&& value) :LinkNode(std::move(value)) {}
+    LinkNode(T&& value)noexcept :LinkNode(std::move(value)) {}
+    //!(LinkNode对象)写法可判断节点是否为尾节点
     explicit operator bool() {
         return next == nullptr;
     }
@@ -24,7 +25,9 @@ public:
 private:
     LinkNodePtr head;
 public:
+    //创建空链表
     LinkList() :head(new LinkNode<T>()) {}
+    //拷贝构造链表
     LinkList(const LinkList<T>& another) :LinkList() {
         LinkNodePtr anotherListCur = (another.head)->next;
         while (anotherListCur) {
@@ -32,10 +35,11 @@ public:
             anotherListCur = anotherListCur->next;
         }
     }
-    LinkList(LinkList<T>&& another) :head(another.head) {
+    LinkList(LinkList<T>&& another)noexcept :head(another.head) {
         another.head = nullptr;
     }
-    LinkList(std::initializer_list<T>datas) :LinkList() {
+    //用花括号包围的初始化列表初始化链表
+    LinkList(std::initializer_list<T> datas) :LinkList() {
         for (const auto& x : datas) {
             addNode(x);
         }
@@ -48,6 +52,7 @@ public:
         }
         return *this;
     }
+    //返回链表首个有效元素的指针
     LinkNodePtr operator*() {
         return head->next;
     }
@@ -68,15 +73,30 @@ public:
             head = tmp;
         }
     }
-    friend std::ostream& operator<<(std::ostream& out, const LinkList<T>& list) {
+    //打印整个链表的值
+    friend std::ostream& operator<<(std::ostream& os, const LinkList& list) {
         auto cur = *list;
-        out << "linklist{ ";
+        os << "linklist{ ";
         while (cur) {
-            out << cur->value << ' ';
+            os << cur->value << ' ';
             cur = cur->next;
         }
-        return out << '}';
+        return os << '}';
     }
+    //通过控制台等输入值动态添加元素
+    friend std::istream& operator>>(std::istream& is, LinkList& list) {
+        T value;
+        is >> value;
+        if (!is) {
+            //输入数据类型不匹配,不进行任何操作,重置流为有效状态退出
+            is.clear();
+        }
+        else {
+            list.addNode(value);
+        }
+        return is;
+    }
+    //遍历链表元素,接受以节点类型引用为参数的可调用对象
     void visit(const std::function<void(LinkNodeReference)>& visitWay = [](const LinkNodeReference node) {
         std::cout << node->value << ' ';
         }) {
@@ -144,7 +164,7 @@ public:
             });
         return size;
     }
-    //算法默认从小到大排序，可传入函数对象指定
+    //插入排序,可传入可调用对象指定排序规则,默认递增排序
     void sort(const std::function<bool(const T&, const T&)>& rule = [](const T& x1, const T& x2) {
         return x1 < x2;
         }) {
