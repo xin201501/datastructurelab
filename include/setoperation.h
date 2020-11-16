@@ -20,7 +20,7 @@ LinkList<T> retainAll(const LinkList<T>& one, const LinkList<T>& theOther) {
     }
     return result;
 }
-//算法假定链表已按一定规则递增排序，求两集合的交集
+//算法假定链表已按一定规则递增排序,求两集合的交集
 template<typename T>
 void addAll(LinkList<T>& one, const LinkList<T>& theOther) {
     one = addAllCopy(one, theOther);
