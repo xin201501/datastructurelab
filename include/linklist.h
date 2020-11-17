@@ -11,7 +11,8 @@ template <typename T> struct LinkNode {
   LinkNode *next;
   LinkNode(const T &value = {}, LinkNode *next = nullptr)
       : value(value), next(next) {}
-  LinkNode(T &&value) noexcept : LinkNode(std::move(value)) {}
+  LinkNode(T &&value, LinkNode *next = nullptr) noexcept
+      : LinkNode(std::move(value)) {}
   //!(LinkNode对象)写法可判断节点是否为尾节点
   explicit operator bool() { return next == nullptr; }
 };
