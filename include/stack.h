@@ -17,8 +17,8 @@ public:
   Stack(Stack &&another) noexcept : LinkList<T>(another.head) {
     another.head = nullptr;
   }
-  Stack(std::initializer_list<T> infos) {
-    for (const auto &x : infos) {
+  Stack(std::initializer_list<T> datas) {
+    for (const auto &x : datas) {
       push(x);
     }
   }
