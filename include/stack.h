@@ -17,6 +17,14 @@ public:
   Stack(Stack &&another) noexcept : LinkList<T>(another.head) {
     another.head = nullptr;
   }
+  Stack &operator=(const Stack &another) {
+    LinkList<T>::operator=(another);
+    return *this;
+  }
+  Stack &operator=(Stack &&another) {
+    LinkList<T>::operator=(another);
+    return *this;
+  }
   Stack(std::initializer_list<T> datas) {
     for (const auto &x : datas) {
       push(x);

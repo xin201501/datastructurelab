@@ -53,12 +53,16 @@ public:
     }
     return *this;
   }
+  LinkList &operator=(LinkList &&another) {
+    head = another.head;
+    another.head = nullptr;
+  }
   //返回链表首个有效元素的指针
   LinkNodePtr operator*() { return head->next; }
   const LinkNodePtr operator*() const { return head->next; }
   LinkNodePtr getHead() { return head; }
   const LinkNodePtr getHead() const { return head; }
-  ~LinkList() {
+  virtual ~LinkList() {
     LinkNodePtr tmp;
     while (head) {
       tmp = head->next;
