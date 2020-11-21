@@ -15,7 +15,7 @@ private:
   Stack<std::string> parkingLine;
   std::map<std::string, size_t> moveCount;
 #if __cplusplus >= 201703L
-  static unsigned long long isVaildInput(std::string_view str)
+  static auto isVaildInput(std::string_view str)
 #else
   static unsigned long long isVaildInput(const std::string &str)
 #endif

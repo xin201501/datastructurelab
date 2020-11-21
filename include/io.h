@@ -23,7 +23,7 @@ inline Stack<std::string> readFile(std::string_view filename) {
   }
   return info;
 }
-inline void writeFile(const std::map<std::string, size_t> writeInfo,
+inline void writeFile(const std::map<std::string, size_t> &writeInfo,
                       std::string_view filename) {
   std::ofstream out(filename.data(), std::ofstream::app);
   for (const auto &[carName, moveCount] : writeInfo) {
@@ -45,7 +45,7 @@ inline Stack<std::string> readFile(const std::string &filename) {
   return info;
 }
 
-inline void writeFile(const std::map<std::string, size_t> writeInfo,
+inline void writeFile(const std::map<std::string, size_t> &writeInfo,
                       const std::string &filename) {
   std::ofstream out(filename.data(), std::ofstream::app);
   for (const auto &v : writeInfo) {
