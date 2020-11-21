@@ -40,8 +40,7 @@ int main(int argc, const char *argv[]) {
       }
       lot.quit(processedFileInfo.substr(0, lastCarNamePostion));
     } else {
-      std::string carName = processedFileInfo.substr(0, lastCarNamePostion);
-      lot.enter(carName);
+      lot.enter(processedFileInfo.substr(0, lastCarNamePostion));
     }
   }
 }

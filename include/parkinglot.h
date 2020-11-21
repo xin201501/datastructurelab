@@ -1,18 +1,13 @@
 #pragma once
 #include "stack.h"
 #include <fstream>
-#include <stdexcept>
+#include <initializer_list>
 #include <string>
 #include <unordered_map>
 #include <utility>
+
 #if __cplusplus >= 201703L
 #include <string_view> //c++17引入,只读字符串,创建/拷贝不需要堆空间分配
-#endif
-#if __cplusplus < 201703L
-namespace {
-size_t CAPACITY = 5;
-const char *defaultOutputFileName = "output.txt";
-} // namespace
 #endif
 class ParkingLot {
 private:
@@ -20,21 +15,33 @@ private:
   std::unordered_map<std::string, size_t> moveCount;
   std::string writeFilename;
   size_t carCount = 0;
+  size_t capacity;
 #if __cplusplus >= 201703L
-  inline static size_t CAPACITY = 5;
   inline static const char *defaultOutputFileName = "output.txt";
+#else
+  static const char *defaultOutputFileName;
 #endif
 public:
 #if __cplusplus >= 201703L
-  ParkingLot(std::string_view writeFilename = defaultOutputFileName)
-      : writeFilename(writeFilename) {}
+  ParkingLot(std::string_view writeFilename = defaultOutputFileName,
+             size_t capacity = 5)
+      : writeFilename(writeFilename), capacity(capacity) {}
 #else
-  ParkingLot(const std::string &writeFilename = defaultOutPutFileName)
-      writeFilename(writeFilename) {}
+  ParkingLot(const std::string &writeFilename = defaultOutputFileName,
+             size_t capacity = 5)
+      : writeFilename(writeFilename), capacity(capacity) {}
 #endif
+#if __cplusplus >= 201703L
   ParkingLot(std::initializer_list<std::string> cars,
-             const std::string &writeFilename = defaultOutputFileName)
-      : parkingLine(cars), writeFilename(writeFilename) {}
+             std::string_view writeFilename = defaultOutputFileName,
+             size_t capacity = 5)
+#else
+  ParkingLot(std::initializer_list<std::string> cars,
+             const std::string &writeFilename = defaultOutputFileName,
+             size_t capacity = 5)
+#endif
+      : parkingLine(cars), writeFilename(writeFilename), capacity(capacity) {
+  }
   friend std::ostream &operator<<(std::ostream &os,
                                   const ParkingLot &parkingLot) {
     return os << parkingLot.parkingLine;
@@ -44,20 +51,29 @@ public:
       : parkingLine(std::move(another.parkingLine)),
         moveCount(std::move(another.moveCount)),
         writeFilename(std::move(another.writeFilename)),
-        carCount(another.carCount) {}
+        carCount(another.carCount), capacity(another.capacity) {}
   ParkingLot &operator=(const ParkingLot &another) {
     parkingLine = another.parkingLine;
     moveCount = another.moveCount;
     writeFilename = another.writeFilename;
     carCount = another.carCount;
+    capacity = another.capacity;
     return *this;
   }
   ParkingLot &operator=(ParkingLot &&another) {
+#if __cplusplus >= 201703L
     std::exchange(*this, another);
+#else
+    parkingLine = std::move(another.parkingLine);
+    moveCount = std::move(another.moveCount);
+    writeFilename = std::move(another.writeFilename);
+    carCount = another.carCount;
+    capacity = another.capacity;
+#endif
     return *this;
   }
   ~ParkingLot() {
-    std::ofstream out("output.txt", std::ofstream::app);
+    std::ofstream out(writeFilename, std::ofstream::app);
     while (!parkingLine.isEmpty()) {
 #if __cplusplus >= 201703L
       std::string_view carName = parkingLine.top();
@@ -82,8 +98,8 @@ public:
 #endif
   {
     std::ofstream out(writeFilename, std::ofstream::app);
-    if (carCount == CAPACITY) {
-      out << "Sorry " << carName << ',' << "the lot is full\n";
+    if (carCount == capacity) {
+      out << "Sorry " << carName << ',' << " the lot is full\n";
       return false;
     }
     parkingLine.push(carName.data());
@@ -97,7 +113,7 @@ public:
   bool quit(const std::string &carName)
 #endif
   {
-    std::ofstream out("output.txt", std::ofstream::app);
+    std::ofstream out(defaultOutputFileName, std::ofstream::app);
     decltype(parkingLine) temporaryQuitCars;
     if (moveCount.find(carName.data()) == moveCount.cend()) {
       return false;
@@ -142,3 +158,6 @@ public:
     return true;
   }
 };
+#if __cplusplus < 201703L
+const char *ParkingLot::defaultOutputFileName = "output.txt";
+#endif
