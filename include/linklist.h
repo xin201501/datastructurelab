@@ -108,7 +108,7 @@ public:
   }
   bool isEmpty() const { return !head->next; }
   void addNode(const T &value) {
-    LinkNodePtr newNode = new LinkNode(value, head->next);
+    LinkNodePtr newNode = new LinkNode<T>(value, head->next);
     newNode->next = head->next;
     head->next = newNode;
   }
