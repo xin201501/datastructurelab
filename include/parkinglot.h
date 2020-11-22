@@ -19,7 +19,7 @@ private:
 #if __cplusplus >= 201703L
   inline static const char *defaultOutputFileName = "output.txt";
 #else
-  static const std::string defaultOutputFileName;
+  static const char *defaultOutputFileName;
 #endif
 public:
 #if __cplusplus >= 201703L
@@ -160,5 +160,5 @@ public:
   }
 };
 #if __cplusplus < 201703L
-const std::string ParkingLot::defaultOutputFileName = "output.txt";
+const char *ParkingLot::defaultOutputFileName = "output.txt";
 #endif

@@ -1,9 +1,8 @@
 #include "../include/parkinglot.h"
 #include <fstream>
 #include <iostream>
-#include <stdlib.h>
 #include <string>
-const std::string defaultInputFileName = "data.txt";
+const char *defaultInputFileName = "data.txt";
 using std::cerr;
 /**
  * @brief 约定在控制台中传入的第一个参数为输入文件名，第二个参数为输出文件名
@@ -17,18 +16,21 @@ using std::cerr;
  */
 int main(int argc, const char *argv[]) {
   system("chcp 65001");
-  ParkingLot lot;
+  char parkingLotInstanceAllocateSpace[sizeof(ParkingLot)];
+  ParkingLot *lot;
   std::ifstream in;
   switch (argc) {
   case 1:
+    lot = new (parkingLotInstanceAllocateSpace) ParkingLot();
     in.open(defaultInputFileName);
     break;
   case 2:
     in.open(argv[1]);
+    lot = new (parkingLotInstanceAllocateSpace) ParkingLot();
     break;
   case 3: {
     in.open(argv[1]);
-    lot = ParkingLot(argv[2]);
+    lot = new (parkingLotInstanceAllocateSpace) ParkingLot(argv[2]);
     break;
   }
   default: {
@@ -49,9 +51,10 @@ int main(int argc, const char *argv[]) {
       if (lastCarNamePostion == std::string::npos) {
         throw std::invalid_argument("txt format error!");
       }
-      lot.quit(processedFileInfo.substr(0, lastCarNamePostion));
+      lot->quit(processedFileInfo.substr(0, lastCarNamePostion));
     } else {
-      lot.enter(processedFileInfo.substr(0, lastCarNamePostion));
+      lot->enter(processedFileInfo.substr(0, lastCarNamePostion));
     }
   }
+  lot->~ParkingLot();
 }
