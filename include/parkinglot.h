@@ -19,7 +19,7 @@ private:
 #if __cplusplus >= 201703L
   inline static const char *defaultOutputFileName = "output.txt";
 #else
-  static const char *defaultOutputFileName;
+  static const std::string defaultOutputFileName;
 #endif
 public:
 #if __cplusplus >= 201703L
@@ -113,7 +113,7 @@ public:
   bool quit(const std::string &carName)
 #endif
   {
-    std::ofstream out(defaultOutputFileName, std::ofstream::app);
+    std::ofstream out(writeFilename, std::ofstream::app);
     decltype(parkingLine) temporaryQuitCars;
     if (moveCount.find(carName.data()) == moveCount.cend()) {
       return false;
@@ -150,6 +150,7 @@ public:
     out << car << " was moved " << moveCount[car.data()]
         << " times while it was here\n";
     parkingLine.pop();
+    moveCount.erase(car.data());
     carCount--;
     while (!temporaryQuitCars.isEmpty()) {
       parkingLine.push(temporaryQuitCars.top());
@@ -159,5 +160,5 @@ public:
   }
 };
 #if __cplusplus < 201703L
-const char *ParkingLot::defaultOutputFileName = "output.txt";
+const std::string ParkingLot::defaultOutputFileName = "output.txt";
 #endif

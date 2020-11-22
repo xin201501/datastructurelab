@@ -1,11 +1,22 @@
 #include "../include/parkinglot.h"
 #include <fstream>
 #include <iostream>
+#include <stdlib.h>
 #include <string>
-const char *defaultInputFileName = "data.txt";
+const std::string defaultInputFileName = "data.txt";
 using std::cerr;
-//约定在控制台中传入的第一个参数为输入文件名
+/**
+ * @brief 约定在控制台中传入的第一个参数为输入文件名，第二个参数为输出文件名
+ 默认输入文件data.txt,输出文件output.txt
+ 输入格式：main{输入文件名}或main{输入文件名}{输出文件名}
+ 不支持只输入输出文件名
+ *
+ * @param argc
+ * @param argv
+ * @return int
+ */
 int main(int argc, const char *argv[]) {
+  system("chcp 65001");
   ParkingLot lot;
   std::ifstream in;
   switch (argc) {
@@ -26,7 +37,7 @@ int main(int argc, const char *argv[]) {
   }
   }
   if (!in) {
-    cerr << "open input file failed，exit.";
+    cerr << "open input file failed,exit.";
     return -1;
   }
   std::string processedFileInfo;
