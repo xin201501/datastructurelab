@@ -43,11 +43,10 @@ public:
   friend std::istream &operator>>(std::istream &is, Stack &stack) {
     T value;
     is >> value;
-    if (!is) {
-      //输入数据类型不匹配,不进行任何操作退出
-      return is;
+    if (is) {
+      stack.addNode(value);
     }
-    stack.addNode(value);
+    return is;
   }
   void push(const T &value) { this->addNode(value); }
   void pop() { this->deleteNodeAfter(this->head); }

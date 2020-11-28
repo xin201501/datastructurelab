@@ -84,11 +84,10 @@ public:
   friend std::istream &operator>>(std::istream &is, LinkList &list) {
     T value;
     is >> value;
-    if (!is) {
-      //输入数据类型不匹配,不进行任何操作退出
-      return is;
+    if (is) {
+      list.addNode(value);
     }
-    list.addNode(value);
+    return is;
   }
   //遍历链表元素,接受以节点类型引用为参数的可调用对象
   void visit(const std::function<void(LinkNodeReference)> &visitWay =
