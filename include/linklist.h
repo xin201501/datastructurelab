@@ -85,12 +85,10 @@ public:
     T value;
     is >> value;
     if (!is) {
-      //输入数据类型不匹配,不进行任何操作,重置流为有效状态退出
-      is.clear();
-    } else {
-      list.addNode(value);
+      //输入数据类型不匹配,不进行任何操作退出
+      return is;
     }
-    return is;
+    list.addNode(value);
   }
   //遍历链表元素,接受以节点类型引用为参数的可调用对象
   void visit(const std::function<void(LinkNodeReference)> &visitWay =

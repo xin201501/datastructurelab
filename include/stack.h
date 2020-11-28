@@ -44,8 +44,7 @@ public:
     T value;
     is >> value;
     if (!is) {
-      //输入数据类型不匹配,不进行任何操作,重置流为有效状态退出
-      is.clear();
+      //输入数据类型不匹配,不进行任何操作退出
     } else {
       stack.addNode(value);
     }
