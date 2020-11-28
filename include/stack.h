@@ -45,10 +45,9 @@ public:
     is >> value;
     if (!is) {
       //输入数据类型不匹配,不进行任何操作退出
-    } else {
-      stack.addNode(value);
+      return is;
     }
-    return is;
+    stack.addNode(value);
   }
   void push(const T &value) { this->addNode(value); }
   void pop() { this->deleteNodeAfter(this->head); }
